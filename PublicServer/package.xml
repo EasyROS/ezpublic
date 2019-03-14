@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+    <name>ezshell</name>
+    <version>0.0.0</version>
+    <description>
+        ezshell is a shell system for using
+    </description>
+
+    <maintainer email="1328788930@qq.com">dean</maintainer>
+    <maintainer email="ls.dean.ch@gmail.com">dean</maintainer>
+
+    <license>MIT</license>
+
+    <author email="1328788930@qq.com">dean</author>
+    <author email="ls.dean.ch@gmail.com">dean</author>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <build_depend>ZeroMQ</build_depend>
+
+    <run_depend>ZeroMQ</run_depend>
+
+</package>
