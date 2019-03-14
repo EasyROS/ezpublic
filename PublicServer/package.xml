@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-    <name>ezshell</name>
+    <name>PublicServer</name>
     <version>0.0.0</version>
     <description>
         ezshell is a shell system for using
@@ -17,7 +17,9 @@
     <buildtool_depend>catkin</buildtool_depend>
 
     <build_depend>ZeroMQ</build_depend>
+    <build_depend>ezshell</build_depend>
 
+    <run_depend>ezshell</run_depend>
     <run_depend>ZeroMQ</run_depend>
 
 </package>

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(ezshell)
+project(PublicClient)
 set(CMAKE_INCLUDE_PATH "/usr/include")
 set(CMAKE_LIBRARY_PATH "/usr/lib/x86_64-linux-gnu/libncurses.so")
 find_package(catkin REQUIRED COMPONENTS
@@ -29,13 +29,6 @@ include_directories(${catkin_INCLUDE_DIRS})
 option(Test "This is a option for Test, test the package" OFF)
 
 set(SOURCES_DIRECTORIES
-        EZIO
-        EZCommand
-        EZTools
-        EZServer
-        EZClient
-        EZInput
-        EZOutput
         #command
         )
 

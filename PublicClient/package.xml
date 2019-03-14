@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-    <name>ezshell</name>
+    <name>PublicClient</name>
     <version>0.0.0</version>
     <description>
         ezshell is a shell system for using
