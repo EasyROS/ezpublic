@@ -4,6 +4,7 @@ set(CMAKE_INCLUDE_PATH "/usr/include")
 set(CMAKE_LIBRARY_PATH "/usr/lib/x86_64-linux-gnu/libncurses.so")
 find_package(catkin REQUIRED COMPONENTS
         ZeroMQ
+        ezshell
         )
 find_package(Boost REQUIRED COMPONENTS
         filesystem
@@ -21,6 +22,7 @@ include_directories(${Boost_INCLUDE_DIR})
 catkin_package(
         CATKIN_DEPENDS
         ZeroMQ
+        ezshell
 )
 ### include TL package
 include_directories(${catkin_INCLUDE_DIRS})
@@ -29,7 +31,7 @@ include_directories(${catkin_INCLUDE_DIRS})
 option(Test "This is a option for Test, test the package" OFF)
 
 set(SOURCES_DIRECTORIES
-        #command
+        Client
         )
 
 foreach (DIRECTORY ${SOURCES_DIRECTORIES})

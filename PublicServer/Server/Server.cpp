@@ -1,8 +1,15 @@
 #include "Server.hpp"
+#include <EZOutput.hpp>
 
-Server::Server(){}
+void *call(char * str){
+    cout << str << endl;
+    EZServer::sendToClient("succ");
+}
 
-int main(){
-    cout << "Server" << endl;
-    return 0;
+Server::Server(){
+    out::listen(call);
+}
+
+void Server::test() {
+    cout << "test" << endl;
 }

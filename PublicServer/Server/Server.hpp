@@ -5,8 +5,10 @@
 using namespace std;
 
 class Server {
+public:
     Server();
-    
+
+    void test();
 };
 
 
