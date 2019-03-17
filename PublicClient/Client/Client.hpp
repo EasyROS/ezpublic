@@ -20,6 +20,10 @@ public:
     void ShellInput();
 
 private:
+    string Jsend();
+    void Jout(string out);
+    void Jtab(string str);
+
     char Input(){
         char c = getchar();
         switch (c){
@@ -28,7 +32,9 @@ private:
                 printf("\nExit with code 3\n");
                 exit(0);
             case 9:
-                //cout << "tab";
+                system(STTY_OPEN TTY_PATH);
+                this->btn = "tab";
+                this->Jtab(this->Jsend());
                 break;
             case 127:
                 if(this->str.length() > 0){
@@ -66,6 +72,8 @@ private:
 
     string str;
     string pre;
+    string pwd;
+    string btn;
     vector <string> mem;
     string last;
 };
