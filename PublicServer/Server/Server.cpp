@@ -1,8 +1,14 @@
-#include "Server.hpp"
-#include <EZOutput.hpp>
+
+#include "Server.h"
+
 
 void *call(char * str){
     cout << str << endl;
+
+    Server *S;
+    S->CommandResolve(str);
+
+
     EZServer::sendToClient("succ");
 }
 
@@ -10,6 +16,7 @@ Server::Server(){
     out::listen(call);
 }
 
-void Server::test() {
-    cout << "test" << endl;
+void Server::CommandResolve(string cmd) {
+    vector<string> comm = EZTools::format(cmd, ' ');
+
 }

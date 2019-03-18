@@ -6,7 +6,7 @@
 #include <termios.h>
 #include <zconf.h>
 #include <sstream>
-
+ClientShell *CS = new ClientShell();
 
 Client::Client() {
     this->pre = "➜ ";
@@ -55,15 +55,14 @@ void Client::Jtab(string str) {
     int line = size.ws_col / 8;
     Json::Value root;
     if (readerinfo->parse(str, root)) {
-        if (root["data"].isArray()) {
+        if (root["data"].isArray() && !root["data"].empty()) {
             for (int i = 0; i < root["data"].size(); i++) {
-                int tmp = (int)(root["data"][i]["value"].asString().length() / 8);
+                int tmp = (int) (root["data"][i]["value"].asString().length() / 8);
                 format = tmp > format ? tmp : format;
                 //cout << (root["data"][i]["value"].asString().length() / 8);
             }
             for (int i = 0; i < root["data"].size(); i++) {
-                for (int x = line / (format + 1); i % x == 0;){
-
+                for (int x = line / (format + 1); i % x == 0;) {
                     cout << endl;
                     break;
                 }
@@ -72,11 +71,10 @@ void Client::Jtab(string str) {
                     cout << "\t";
                 }
             }
-            //cout << root["data"].asString() << endl;
+            printf("\n");
         }
     }
-
-    printf("\n");
+    printf("\r");
     printf("%s %s%s",
            Input::setColorByStatus(this->pre, 4).c_str(),
            Input::setColorByStatus(this->pwd, 2).c_str(),
@@ -90,6 +88,12 @@ void Client::Jout(string out) {
 
     Json::Value root;
     if (readerinfo->parse(out, root)) {
+        if (root["err"].isString()) {
+            cout << root["err"].asString() << endl;
+            CS->error();
+        }else{
+            CS->info();
+        }
         if (root["cmd"].isString()) {
             cout << root["cmd"].asString() << endl;
         }
@@ -104,7 +108,7 @@ void Client::Jout(string out) {
 
         if (root["data"].isArray()) {
             for (int i = 0; i < root['data'].size(); i++) {
-                int tmp = (int)(root["data"][i]["key"].asString().length() / 8);
+                int tmp = (int) (root["data"][i]["key"].asString().length() / 8);
                 format = tmp > format ? tmp : format;
             }
             for (int i = 0; i < root['data'].size(); i++) {
@@ -114,7 +118,7 @@ void Client::Jout(string out) {
                 }
                 cout << root["data"][i]["value"] << endl;
             }
-            cout << root["data"].asString() << endl;
+            //cout << root["data"].asString() << endl;
         }
     }
 
@@ -124,11 +128,11 @@ void Client::Jout(string out) {
 
 void Client::ShellInput() {
 
-    ClientShell *CS = new ClientShell();
 
     this->pwd = "/";
     while (true) {
         this->str = "";
+        this->fix = "";
         printf("%s %s",
                Input::setColorByStatus(this->pre, CS->getState()).c_str(),
                Input::setColorByStatus(this->pwd, 2).c_str());
@@ -150,9 +154,67 @@ void Client::ShellInput() {
             printf("\n");
             break;
         }
-        this->mem.push_back(this->str);
-
+        if (this->str.length() > 0) {
+            for (int i = 0; i < this->mem.size(); i++) {
+                if (this->mem[i] == this->str) {
+                    this->mem.erase(this->mem.begin() + i);
+                    i--;
+                }
+            }
+            this->mem.push_back(this->str);
+            this->memindex = (int) mem.size();
+        }
         printf("\n");
         this->Jout(this->Jsend());
     }
+}
+
+void Client::printline() {
+    printf("\33[2K\r");
+    printf("%s %s",
+           Input::setColorByStatus(this->pre, 3).c_str(),
+           Input::setColorByStatus(this->pwd, 2).c_str());
+    printf("%s%s", this->str.c_str(), this->fix.c_str());
+    for (int i = 0; i < this->fix.length(); i++) {
+        printf("\b");
+    }
+}
+
+string Client::UP() {
+
+    if (this->memindex > 0) {
+        this->memindex--;
+        this->str = this->mem[this->memindex];
+        this->index = (int) this->str.length();
+        this->fix = "";
+        printf("\33[2K\r");
+        printf("%s %s%s",
+               Input::setColorByStatus(this->pre, 4).c_str(),
+               Input::setColorByStatus(this->pwd, 2).c_str(),
+               this->str.c_str());
+    }
+}
+
+string Client::DN() {
+
+    if (this->memindex < this->mem.size() - 1) {
+        this->memindex++;
+        this->str = this->mem[this->memindex];
+        this->index = (int) this->str.length();
+        this->fix = "";
+        printf("\33[2K\r");
+        printf("%s %s%s",
+               Input::setColorByStatus(this->pre, 4).c_str(),
+               Input::setColorByStatus(this->pwd, 2).c_str(),
+               this->str.c_str());
+    } else {
+        this->str = "";
+
+        printf("\33[2K\r");
+        printf("%s %s%s",
+               Input::setColorByStatus(this->pre, 4).c_str(),
+               Input::setColorByStatus(this->pwd, 2).c_str(),
+               this->str.c_str());
+    }
+
 }

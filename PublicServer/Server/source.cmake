@@ -1,5 +1,5 @@
 set(Source
         Server.cpp
-        Server.hpp
+        Server.h
         test.cpp
         )

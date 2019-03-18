@@ -1,4 +1,6 @@
-#include "Server.hpp"
+
+#include "Server.h"
+
 #include "boost/thread.hpp"
 
 int main(){

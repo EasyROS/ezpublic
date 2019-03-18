@@ -1,5 +1,6 @@
 #ifndef PUBLICCLIENT_CLIENT_HPP
 #define PUBLICCLIENT_CLIENT_HPP
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -21,12 +22,14 @@ public:
 
 private:
     string Jsend();
+
     void Jout(string out);
+
     void Jtab(string str);
 
-    char Input(){
+    char Input() {
         char c = getchar();
-        switch (c){
+        switch (c) {
             case 3:;
                 system(STTY_OPEN TTY_PATH);
                 printf("\nExit with code 3\n");
@@ -37,45 +40,78 @@ private:
                 this->Jtab(this->Jsend());
                 break;
             case 127:
-                if(this->str.length() > 0){
-                    this->str = this->str.substr(0,this->str.length() - 1);
-                    printf("\b \b");
+                if (this->str.length() > 0) {
+                    this->str = this->str.substr(0, this->str.length() - 1);
+                    this->printline();
                 }
                 break;
             case 91:
                 this->Input();
                 break;
             case 65:
-                printf("UP");
+                this->UP();
+                //printf("UP");
                 break;
             case 66:
-                printf("DN");
+                this->DN();
+                //printf("DN");
                 break;
             case 68:
-                printf("LF");
+                this->LF();
+                //printf("LF");
                 break;
             case 67:
-                printf("RT");
+                this->RT();
+                //printf("RT");
                 break;
             case 27:
                 this->Input();
                 break;
             case 13:
                 printf("%c", c);
+                this->index = 0;
+                this->str = this->str + this->fix;
                 break;
             default:
                 this->str += c;
-                printf("%c", c);
+                this->index++;
+                this->printline();
         }
         return c;
     }
 
+    string UP();
+
+    string DN();
+
+    string LF() {
+        if (this->index > 0) {
+            this->index--;
+            this->fix.insert(this->fix.begin(), this->str[index]);
+            this->str.erase(this->str.end() - 1);
+            printf("\b");
+        }
+    }
+
+    string RT() {
+        if (this->index < this->str.length() + this->fix.length()) {
+            this->str.push_back(this->fix[0]);
+            this->fix.erase(this->fix.begin());
+            printf("%c", this->str[index]);
+            this->index++;
+        }
+    }
+
+    void printline();
+
+    int index;
+    int memindex;
     string str;
     string pre;
     string pwd;
     string btn;
-    vector <string> mem;
-    string last;
+    string fix;
+    vector<string> mem;
 };
 
 
