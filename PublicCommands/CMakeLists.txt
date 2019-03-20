@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
-project(PublicServer)
+project(PublicCommands)
 set(CMAKE_INCLUDE_PATH "/usr/include")
 set(CMAKE_LIBRARY_PATH "/usr/lib/x86_64-linux-gnu/libncurses.so")
 find_package(catkin REQUIRED COMPONENTS
         ZeroMQ
         ezshell
+        jsoncpp
         )
 find_package(Boost REQUIRED COMPONENTS
         filesystem
@@ -20,12 +21,9 @@ aux_source_directory(. srcs)
 include_directories(${Boost_INCLUDE_DIR})
 
 catkin_package(
-        INCLUDE_DIRS Server
-
-        LIBRARIES PublicServer
-
         CATKIN_DEPENDS
         ZeroMQ
+        jsoncpp
         ezshell
 )
 ### include TL package
@@ -35,8 +33,7 @@ include_directories(${catkin_INCLUDE_DIRS})
 option(Test "This is a option for Test, test the package" OFF)
 
 set(SOURCES_DIRECTORIES
-        Server
-        #command
+        Commands
         )
 
 foreach (DIRECTORY ${SOURCES_DIRECTORIES})
@@ -65,7 +62,6 @@ foreach (DIRECTORY ${SOURCES_DIRECTORIES})
     endif ()
 endforeach (DIRECTORY)
 
-add_library(PublicServer SHARED ${ALL_SOURCES})
 
-target_link_libraries(PublicServer ${catkin_LIBRARIES})
+#target_link_libraries(ezshell ${catkin_LIBRARIES})
 

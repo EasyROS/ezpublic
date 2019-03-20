@@ -11,10 +11,10 @@ public:
 
     void CommandResolve(string cmd);
 
+    EZIO *pRoot;
 private:
-    EZCommand *CMD;
+    vector<EZCommand *> CMD;
 
 };
 
-
-#endif EZPUBLIC_SERVER_HPP
+#endif
