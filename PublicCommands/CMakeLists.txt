@@ -5,6 +5,7 @@ set(CMAKE_LIBRARY_PATH "/usr/lib/x86_64-linux-gnu/libncurses.so")
 find_package(catkin REQUIRED COMPONENTS
         ZeroMQ
         ezshell
+        PublicServer
         jsoncpp
         )
 find_package(Boost REQUIRED COMPONENTS
@@ -24,6 +25,7 @@ catkin_package(
         CATKIN_DEPENDS
         ZeroMQ
         jsoncpp
+        PublicServer
         ezshell
 )
 ### include TL package
@@ -34,6 +36,7 @@ option(Test "This is a option for Test, test the package" OFF)
 
 set(SOURCES_DIRECTORIES
         Commands
+        CommandsBinding
         )
 
 foreach (DIRECTORY ${SOURCES_DIRECTORIES})

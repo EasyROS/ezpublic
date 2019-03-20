@@ -1,29 +1,45 @@
 #include "lsCommand.hpp"
-#include <EZOutput.h>
 #include <Server.h>
 
-class ls_command : public file {
-public:
-    ls_command(string name) : file(name) {}
+Json::Value lsCommand::run() {
 
-    void run() {
-        cout << "test_run" << endl;
-    }
-};
+    Json::Value value;
+    value["cmd"] = this->cmd;
+    value["pwd"] = this->pwd;
+    value["btn"] = this->btn;
+    
+    Json::Value res;
 
-class ls : public EZCommand {
-public:
-    ls() {
-        this->Command = new ls_command("ls");
+    EZIO * R = this->parent;
+
+    if(this->btn == "cmt"){
+        for(int i = 0; i < R->getChildren().size(); i++){
+            if(!R->getChildren()[i]->_hidden())
+                res.append(R->getChildren()[i]->get_name());
+        }
+
     }
-    void init(EZIO * r){
-        r->Add(this->Command);
-        this->Command->set_global()->set_exec()->set_hidden();
+    if(this->btn == "tab"){
+        ////check cmd
+        for(int i = 0; i < R->getChildren().size(); i++){
+            res.append(R->getChildren()[i]->get_name());
+        }
     }
 
-    ~ls() {
-        delete this->Command;
-        delete this;
-    }
+    value["res"] = res;
+    return value;
+}
 
-};
+ls::ls() {
+    this->Command = new lsCommand("ls");
+}
+
+void ls::init(EZIO *r) {
+    r->Add(this->Command);
+    this->Command->set_global()->set_exec()->set_hidden();
+}
+
+ls::~ls() {
+    delete this->Command;
+    delete this;
+}
