@@ -1,7 +1,7 @@
 #ifndef PUBLICCLIENT_CDCOMMAND_HPP
 #define PUBLICCLIENT_CDCOMMAND_HPP
 
-#include <Server.h>
+#include "EZOutput.h"
 
 
 class cdCommand : public file {

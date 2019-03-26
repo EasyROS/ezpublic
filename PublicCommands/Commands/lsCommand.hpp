@@ -1,7 +1,7 @@
 #ifndef PUBLICCLIENT_LSCOMMAND_HPP
 #define PUBLICCLIENT_LSCOMMAND_HPP
 
-#include <Server.h>
+#include "EZOutput.h"
 
 class lsCommand : public file {
 public:

@@ -12,13 +12,8 @@
 #include "../Commands/viewCommand.hpp"
 
 namespace CMD{
-    ls *LS = new ls();
-    cd *CD = new cd();
 
-    void binding(EZIO *p){
-        LS->init(p);
-        CD->init(p);
-    }
+    void binding(EZIO *p);
 }
 
 #endif //PUBLICCOMMANDS_COMMANDSBINDING_H

@@ -1,5 +1,4 @@
 #include "cdCommand.hpp"
-#include <Server.h>
 
 Json::Value cdCommand::run() {
     Json::Value value;

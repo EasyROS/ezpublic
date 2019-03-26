@@ -1,7 +1,9 @@
 #include "lsCommand.hpp"
-#include <Server.h>
-//#include <boost/regex.hpp>
+#include <regex.h>
+#include <stdio.h>
+#include <cstring>
 #include <iostream>
+#include <EZTools.hpp>
 
 //using namespace boost;
 
@@ -14,12 +16,15 @@ Json::Value lsCommand::run() {
 
     Json::Value res;
 
-    EZIO *R = this->parent;
     EZIO *T = this->parent;
     vector<string> C = EZTools::format(this->cmd, ' ');
-    vector<string> L = EZTools::format(C.back(), '/');
-
-    cout << C.back() << C.size() << L.size() << endl;
+    vector<string> L = EZTools::format(this->pwd + (C.size() > 1 ? C.back() : ""), '/');
+    //cout << C.size() << "\t" << this->cmd + "\t" << C.back() + "\t" << this->pwd + (C.size() > 1 ? C.back() : "") << "\t" << L.size() <<endl;
+    string pattern = "^" + L.back() + "\\S*";
+    const size_t nmatch = 10;
+    regmatch_t pm[10];
+    regex_t reg;
+    regcomp(&reg, pattern.c_str(), REG_EXTENDED | REG_NOSUB);
 
     int j = 0;
     if (C.size() > 1) {
@@ -27,31 +32,26 @@ Json::Value lsCommand::run() {
             try {
                 T = T->searchChild(L[j]);
             } catch (char const *e) {
-                value["err"] = string(e) + " Not Found " + L[j];
+                if (string(e) == "404")
+                    value["err"] = string(e) + " Not Found " + L[j];
                 return value;
             }
         }
 
     }
+    //cout << T->get_name() << endl;
     if (this->btn == "cmt") {
-        for (int i = 0; i < R->getChildren().size(); i++) {
-            if (!R->getChildren()[i]->_hidden())
-                res.append(R->getChildren()[i]->get_name());
-        }
+        if (C[0] == "ls") {
+            if (C.size() >= 1) {
+                //cout << L.back() << C.back() << endl;
+                for (int i = 0; i < T->getChildren().size(); i++) {
+                    if (!regexec(&reg, T->getChildren()[i]->get_name().c_str(), nmatch, pm, REG_NOTEOL) == REG_NOMATCH
+                        && !T->getChildren()[i]->_hidden()
+                        && !T->getChildren()[i]->_global())
+                        res.append(T->getChildren()[i]->get_name());
+                }
 
-    }
-    if (this->btn == "tab") {
-        if (j == L.size() - 1) {
-            //regex pattern(L.back() + "*");
-            //cmatch what;
-            for (int i = 0; i < T->getChildren().size(); i++) {
-                //if (regex_search(T->getChildren()[i]->get_name().c_str(), what, pattern))
-                    res.append(R->getChildren()[i]->get_name());
             }
-
-        }
-        for (int i = 0; i < R->getChildren().size(); i++) {
-            res.append(R->getChildren()[i]->get_name());
         }
     }
 
