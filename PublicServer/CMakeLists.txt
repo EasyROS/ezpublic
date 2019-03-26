@@ -5,6 +5,7 @@ set(CMAKE_LIBRARY_PATH "/usr/lib/x86_64-linux-gnu/libncurses.so")
 find_package(catkin REQUIRED COMPONENTS
         ZeroMQ
         ezshell
+        PublicCommands
         )
 find_package(Boost REQUIRED COMPONENTS
         filesystem
@@ -25,6 +26,7 @@ catkin_package(
         LIBRARIES PublicServer
 
         CATKIN_DEPENDS
+        PublicCommands
         ZeroMQ
         ezshell
 )
@@ -64,6 +66,9 @@ foreach (DIRECTORY ${SOURCES_DIRECTORIES})
         target_link_libraries(${DIRECTORY} ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_LIBRARY_PATH})
     endif ()
 endforeach (DIRECTORY)
+
+add_executable(MainServer ${ALL_SOURCES} Server/MainServer.cpp)
+target_link_libraries(MainServer ${catkin_LIBRARIES})
 
 add_library(PublicServer SHARED ${ALL_SOURCES})
 

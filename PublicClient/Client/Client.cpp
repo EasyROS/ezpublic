@@ -6,6 +6,7 @@
 #include <termios.h>
 #include <zconf.h>
 #include <sstream>
+
 ClientShell *CS = new ClientShell();
 
 Client::Client() {
@@ -56,22 +57,26 @@ void Client::Jtab(string str) {
     Json::Value root;
     if (readerinfo->parse(str, root)) {
         if (root["data"].isArray() && !root["data"].empty()) {
-            for (int i = 0; i < root["data"].size(); i++) {
-                int tmp = (int) (root["data"][i]["value"].asString().length() / 8);
-                format = tmp > format ? tmp : format;
-                //cout << (root["data"][i]["value"].asString().length() / 8);
-            }
-            for (int i = 0; i < root["data"].size(); i++) {
-                for (int x = line / (format + 1); i % x == 0;) {
-                    cout << endl;
-                    break;
+            if (root["data"].size() == 1) {
+                this->str = root["data"][0]["key"].asString();
+            } else {
+                for (int i = 0; i < root["data"].size(); i++) {
+                    int tmp = (int) (root["data"][i]["key"].asString().length() / 8);
+                    format = tmp > format ? tmp : format;
+                    //cout << (root["data"][i]["value"].asString().length() / 8);
                 }
-                cout << root["data"][i]["value"].asString();
-                for (int j = format; j >= 0; j--) {
-                    cout << "\t";
+                for (int i = 0; i < root["data"].size(); i++) {
+                    for (int x = line / (format + 1); i % x == 0;) {
+                        cout << endl;
+                        break;
+                    }
+                    cout << root["data"][i]["key"].asString();
+                    for (int j = format; j >= 0; j--) {
+                        cout << "\t";
+                    }
                 }
+                printf("\n");
             }
-            printf("\n");
         }
     }
     printf("\r");
@@ -89,13 +94,14 @@ void Client::Jout(string out) {
     Json::Value root;
     if (readerinfo->parse(out, root)) {
         if (root["err"].isString()) {
-            cout << root["err"].asString() << endl;
             CS->error();
-        }else{
+            cout << Input::setColorByStatus(root["err"].asString(), CS->getState()) << endl;
+        } else {
             CS->info();
         }
         if (root["cmd"].isString()) {
-            cout << root["cmd"].asString() << endl;
+            this->str = root["cmd"].asString();
+            //cout << root["cmd"].asString() << endl;
         }
 
         if (root["btn"].isString()) {
@@ -107,16 +113,23 @@ void Client::Jout(string out) {
         }
 
         if (root["data"].isArray()) {
-            for (int i = 0; i < root['data'].size(); i++) {
-                int tmp = (int) (root["data"][i]["key"].asString().length() / 8);
-                format = tmp > format ? tmp : format;
+            for (int i = 0; i < root["data"].size(); i++) {
+
+                if (root["data"][i]["key"].isString()) {
+                    int tmp = (int) (root["data"][i]["key"].asString().length() / 8);
+                    format = tmp > format ? tmp : format;
+                }
             }
-            for (int i = 0; i < root['data'].size(); i++) {
-                cout << root["data"][i]["key"];
+            for (int i = 0; i < root["data"].size(); i++) {
+                if (root["data"][i]["key"].isString())
+                    cout << root["data"][i]["key"].asString();
                 for (int j = format; j >= 0; j--) {
                     cout << "\t";
                 }
-                cout << root["data"][i]["value"] << endl;
+                if (root["data"][i]["key"].isString())
+                    cout << root["data"][i]["value"].asString() << endl;
+                else
+                    cout << "\r" << root["data"][i]["value"].asString() << endl;
             }
             //cout << root["data"].asString() << endl;
         }

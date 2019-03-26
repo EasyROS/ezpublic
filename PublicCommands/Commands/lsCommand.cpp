@@ -15,6 +15,7 @@ Json::Value lsCommand::run() {
     value["btn"] = this->btn;
 
     Json::Value res;
+    Json::Value obj;
 
     EZIO *T = this->parent;
     vector<string> C = EZTools::format(this->cmd, ' ');
@@ -47,15 +48,19 @@ Json::Value lsCommand::run() {
                 for (int i = 0; i < T->getChildren().size(); i++) {
                     if (!regexec(&reg, T->getChildren()[i]->get_name().c_str(), nmatch, pm, REG_NOTEOL) == REG_NOMATCH
                         && !T->getChildren()[i]->_hidden()
-                        && !T->getChildren()[i]->_global())
-                        res.append(T->getChildren()[i]->get_name());
+                        && !T->getChildren()[i]->_global()){
+
+                        obj["value"] = "";
+                        obj["key"] = T->getChildren()[i]->get_name();
+                        res.append(obj);
+                    }
                 }
 
             }
         }
     }
 
-    value["res"] = res;
+    value["data"] = res;
     return value;
 }
 

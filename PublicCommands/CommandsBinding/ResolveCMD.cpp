@@ -18,7 +18,11 @@ Json::Value RCMD::resolve(EZIO *pRoot, string cmd, string btn, string pwd) {
     value["pwd"] = pwd;
     value["btn"] = btn;
 
+    if (cmd == "")
+        return value;
+
     Json::Value res;
+    Json::Value obj;
 
     for (int j = 0; j < L.size() - 1; j++) {
         try {
@@ -42,23 +46,28 @@ Json::Value RCMD::resolve(EZIO *pRoot, string cmd, string btn, string pwd) {
                 if (pRoot->getChildren()[i]->_hidden() &&
                     pRoot->getChildren()[i]->_global() &&
                     pRoot->getChildren()[i]->_exec() &&
-                    !regexec(&reg, pRoot->getChildren()[i]->get_name().c_str(), nmatch, pm, REG_NOTEOL) == REG_NOMATCH)
-
-                    res.append(pRoot->getChildren()[i]->get_name());
+                    !regexec(&reg, pRoot->getChildren()[i]->get_name().c_str(), nmatch, pm, REG_NOTEOL) ==
+                    REG_NOMATCH) {
+                    obj["value"] = "";
+                    obj["key"] = pRoot->getChildren()[i]->get_name();
+                    res.append(obj);
+                }
             }
 
         for (int i = 0; i < T->getChildren().size(); i++) {
             if (!regexec(&reg, T->getChildren()[i]->get_name().c_str(), nmatch, pm, REG_NOTEOL) == REG_NOMATCH
                 && !T->getChildren()[i]->_hidden()
-                && !T->getChildren()[i]->_global())
-                res.append(T->getChildren()[i]->get_name());
+                && !T->getChildren()[i]->_global()) {
+                obj["value"] = "";
+                obj["key"] = T->getChildren()[i]->get_name();
+                res.append(obj);
+            }
         }
 
-        value["res"] = res;
-        return value;
     }
     if (btn == "cmt") {
-        for (int i = 0; i < pRoot->getChildren().size(); i++) {
+        int i = 0;
+        for (; i < pRoot->getChildren().size(); i++) {
             if (C[0] == pRoot->getChildren()[i]->get_name() &&
                 pRoot->getChildren()[i]->_hidden() &&
                 pRoot->getChildren()[i]->_global() &&
@@ -71,6 +80,10 @@ Json::Value RCMD::resolve(EZIO *pRoot, string cmd, string btn, string pwd) {
                 return pRoot->getChildren()[i]->run();
             }
         }
+        if (i == pRoot->getChildren().size()) {
+            value["err"] = "Command Not Found";
+        }
     }
-
+    value["data"] = res;
+    return value;
 }

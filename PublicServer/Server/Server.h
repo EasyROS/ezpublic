@@ -1,19 +1,24 @@
 #ifndef EZPUBLIC_SERVER_HPP
 #define EZPUBLIC_SERVER_HPP
+
 #include <iostream>
 #include <EZOutput.h>
 #include <EZTools.hpp>
+
 using namespace std;
 
 class Server {
 public:
     Server();
 
-    void CommandResolve(string cmd);
+    string JsonToString(Json::Value value);
+
+    void StringToJson(string str);
+
+    void Start();
 
     EZIO *pRoot;
-private:
-    vector<EZCommand *> CMD;
+    Json::Value content;
 
 };
 

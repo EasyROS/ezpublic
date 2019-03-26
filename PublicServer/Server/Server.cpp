@@ -1,29 +1,43 @@
 #include "Server.h"
+#include <CommandsBinding.h>
+#include <ResolveCMD.h>
 
-void *call(char * str){
+Server *S = new Server();
+void *call(char *str) {
     cout << str << endl;
 
-    Server *S;
-    S->CommandResolve(str);
+    S->StringToJson(str);
+    Json::Value res = RCMD::resolve(S->pRoot,
+                  S->content["cmd"].asString(),
+                  S->content["btn"].asString(),
+                  S->content["pwd"].asString()
+    );
 
-
-    EZServer::sendToClient("succ");
+    EZServer::sendToClient(S->JsonToString(res));
+    cout << S->JsonToString(res) << endl;
 }
 
-EZCommand *LS = new EZCommand();
-EZCommand *CD = new EZCommand();
-
-
-Server::Server(){
-    //LS->Command->Add()
+Server::Server() {
     this->pRoot = new directory("root");
-    this->CMD;
-
-    out::listen(call);
+    this->pRoot->Add(new directory("test"));
+    this->pRoot->Add(new directory("test1"));
+    this->pRoot->Add(new directory("test2"));
+    CMD::binding(this->pRoot);
 }
 
-void Server::CommandResolve(string cmd) {
-    vector<string> comm = EZTools::format(cmd, ' ');
+string Server::JsonToString(Json::Value value) {
+    Json::FastWriter fw;
 
+    return fw.write(value);
+}
 
+void Server::StringToJson(string str) {
+    Json::Reader *readerinfo = new Json::Reader(Json::Features::strictMode());
+    if(readerinfo->parse(str, this->content)){
+        //cout << "reader succ" << endl;
+    }
+}
+
+void Server::Start() {
+    out::listen(call);
 }

@@ -1,7 +1,7 @@
 
 #include "Server.h"
 
-#include "boost/thread.hpp"
+//#include "boost/thread.hpp"
 
 int main(){
     cout << "Server Startup" << endl;
@@ -12,6 +12,7 @@ int main(){
      * @param   Thread, Node, argv
      * */
 
+
     ///thread function or class
     ///vision thread
     ///tick thread
@@ -19,6 +20,6 @@ int main(){
     ///any other thread
 
     ///default control service @param Server Class
-    (new Server())->Start();
+    new Server();
     return 0;
 }

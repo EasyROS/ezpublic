@@ -67,6 +67,6 @@ foreach (DIRECTORY ${SOURCES_DIRECTORIES})
     endif ()
 endforeach (DIRECTORY)
 
-
-#target_link_libraries(ezshell ${catkin_LIBRARIES})
+add_library(PublicCommands SHARED ${ALL_SOURCES})
+target_link_libraries(PublicCommands ${catkin_LIBRARIES})
 
