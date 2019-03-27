@@ -19,9 +19,6 @@ void *call(char *str) {
 
 Server::Server() {
     this->pRoot = new directory("root");
-    this->pRoot->Add(new directory("test"));
-    this->pRoot->Add(new directory("test1"));
-    this->pRoot->Add(new directory("test2"));
     CMD::binding(this->pRoot);
 }
 
@@ -36,6 +33,10 @@ void Server::StringToJson(string str) {
     if(readerinfo->parse(str, this->content)){
         //cout << "reader succ" << endl;
     }
+}
+
+Server* ServerSTD::getS() {
+    return S;
 }
 
 void Server::Start() {

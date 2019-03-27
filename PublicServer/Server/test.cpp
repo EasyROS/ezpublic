@@ -19,6 +19,9 @@ int main(){
     ///any other thread
 
     ///default control service @param Server Class
-    (new Server())->Start();
+    ServerSTD::getS()->pRoot->Add(new directory("test"));
+    ServerSTD::getS()->pRoot->Add(new directory("test1"));
+    ServerSTD::getS()->pRoot->Add(new directory("test2"));
+    ServerSTD::getS()->Start();
     return 0;
 }

@@ -22,4 +22,8 @@ public:
 
 };
 
+namespace ServerSTD{
+    Server *getS();
+}
+
 #endif

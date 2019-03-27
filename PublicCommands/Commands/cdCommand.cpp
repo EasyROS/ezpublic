@@ -1,4 +1,8 @@
 #include "cdCommand.hpp"
+#include <regex.h>
+#include <stdio.h>
+#include <cstring>
+#include <EZTools.hpp>
 
 Json::Value cdCommand::run() {
     Json::Value value;
@@ -6,17 +10,37 @@ Json::Value cdCommand::run() {
     value["pwd"] = this->pwd;
     value["btn"] = this->btn;
 
-    //EZIO * R = this->parent;
+    EZIO *T = this->parent;
+    vector<string> C = EZTools::format(this->cmd, ' ');
+    vector<string> L = EZTools::format(this->pwd + (C.size() > 1 ? C.back() : ""), '/');
 
-//    if(this->btn == "cmt"){
-//        for(int i = 0; i < R->getChildren().size(); i++){
-//            cout << R->getChildren()[i]->get_name() << endl;
-//        }
-//    }
-//    if(this->btn == "tab"){
-//
-//    }
-    cout << "cd" << endl;
+
+    cout << L.size() << L.back().length() << endl;
+
+    if (this->btn == "cmt") {
+        if (C[0] == "cd") {
+            if (C.size() > 1) {
+                for (int j = 0; j < L.size(); j++) {
+                    try {
+                        T = T->searchChild(L[j]);
+                        if (!T->_dir()) {
+                            value["err"] = L[j] + "Is Not Directory";
+                            return value;
+                        }
+
+                    } catch (char const *e) {
+                        if (string(e) == "404")
+                            value["err"] = "Directory Not Found :" + L[j];
+                        return value;
+                    }
+                }
+                value["pwd"] = EZTools::connect_string(T->getPWD(), '/');
+            }
+            if (C.size() == 1) {
+                value["pwd"] = "/";
+            }
+        }
+    }
     return value;
 }
 

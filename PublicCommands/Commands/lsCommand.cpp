@@ -5,8 +5,6 @@
 #include <iostream>
 #include <EZTools.hpp>
 
-//using namespace boost;
-
 Json::Value lsCommand::run() {
 
     Json::Value value;
@@ -28,19 +26,18 @@ Json::Value lsCommand::run() {
     regcomp(&reg, pattern.c_str(), REG_EXTENDED | REG_NOSUB);
 
     int j = 0;
-    if (C.size() > 1) {
-        for (; j < L.size() - 1; j++) {
-            try {
-                T = T->searchChild(L[j]);
-            } catch (char const *e) {
-                if (string(e) == "404")
-                    value["err"] = string(e) + " Not Found " + L[j];
-                return value;
-            }
+    for (; j < L.size() - 1; j++) {
+        try {
+            //cout << L[j] << endl;
+            T = T->searchChild(L[j]);
+        } catch (char const *e) {
+            if (string(e) == "404")
+                value["err"] = string(e) + " Not Found " + L[j];
+            return value;
         }
-
     }
-    //cout << T->get_name() << endl;
+
+    //cout << L.size() << L.back() << T->get_name() << endl;
     if (this->btn == "cmt") {
         if (C[0] == "ls") {
             if (C.size() >= 1) {
@@ -48,9 +45,12 @@ Json::Value lsCommand::run() {
                 for (int i = 0; i < T->getChildren().size(); i++) {
                     if (!regexec(&reg, T->getChildren()[i]->get_name().c_str(), nmatch, pm, REG_NOTEOL) == REG_NOMATCH
                         && !T->getChildren()[i]->_hidden()
-                        && !T->getChildren()[i]->_global()){
+                        && !T->getChildren()[i]->_global()) {
+
 
                         obj["value"] = "";
+                        if (T->getChildren()[i]->_file())
+                            obj["value"] = T->getChildren()[i]->get_name();
                         obj["key"] = T->getChildren()[i]->get_name();
                         res.append(obj);
                     }

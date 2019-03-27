@@ -80,7 +80,7 @@ void Client::Jtab(string str) {
         }
     }
     printf("\r");
-    printf("%s %s%s",
+    printf("%s %s %s",
            Input::setColorByStatus(this->pre, 4).c_str(),
            Input::setColorByStatus(this->pwd, 2).c_str(),
            this->str.c_str());
@@ -146,7 +146,7 @@ void Client::ShellInput() {
     while (true) {
         this->str = "";
         this->fix = "";
-        printf("%s %s",
+        printf("%s %s ",
                Input::setColorByStatus(this->pre, CS->getState()).c_str(),
                Input::setColorByStatus(this->pwd, 2).c_str());
 
@@ -184,7 +184,7 @@ void Client::ShellInput() {
 
 void Client::printline() {
     printf("\33[2K\r");
-    printf("%s %s",
+    printf("%s %s ",
            Input::setColorByStatus(this->pre, 3).c_str(),
            Input::setColorByStatus(this->pwd, 2).c_str());
     printf("%s%s", this->str.c_str(), this->fix.c_str());
@@ -193,7 +193,7 @@ void Client::printline() {
     }
 }
 
-string Client::UP() {
+void Client::UP() {
 
     if (this->memindex > 0) {
         this->memindex--;
@@ -201,14 +201,14 @@ string Client::UP() {
         this->index = (int) this->str.length();
         this->fix = "";
         printf("\33[2K\r");
-        printf("%s %s%s",
+        printf("%s %s %s",
                Input::setColorByStatus(this->pre, 4).c_str(),
                Input::setColorByStatus(this->pwd, 2).c_str(),
                this->str.c_str());
     }
 }
 
-string Client::DN() {
+void Client::DN() {
 
     if (this->memindex < this->mem.size() - 1) {
         this->memindex++;
@@ -216,7 +216,7 @@ string Client::DN() {
         this->index = (int) this->str.length();
         this->fix = "";
         printf("\33[2K\r");
-        printf("%s %s%s",
+        printf("%s %s %s",
                Input::setColorByStatus(this->pre, 4).c_str(),
                Input::setColorByStatus(this->pwd, 2).c_str(),
                this->str.c_str());
@@ -224,7 +224,7 @@ string Client::DN() {
         this->str = "";
 
         printf("\33[2K\r");
-        printf("%s %s%s",
+        printf("%s %s %s",
                Input::setColorByStatus(this->pre, 4).c_str(),
                Input::setColorByStatus(this->pwd, 2).c_str(),
                this->str.c_str());

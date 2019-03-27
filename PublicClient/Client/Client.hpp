@@ -80,9 +80,9 @@ private:
         return c;
     }
 
-    string UP();
+    void UP();
 
-    string DN();
+    void DN();
 
     string LF() {
         if (this->index > 0) {
