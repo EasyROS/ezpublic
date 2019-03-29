@@ -29,54 +29,59 @@ private:
 
     char Input() {
         char c = getchar();
-        switch (c) {
-            case 3:;
-                system(STTY_OPEN TTY_PATH);
-                printf("\nExit with code 3\n");
-                exit(0);
-            case 9:
-                system(STTY_OPEN TTY_PATH);
-                this->btn = "tab";
-                this->Jtab(this->Jsend());
-                break;
-            case 127:
-                if (this->str.length() > 0) {
-                    this->str = this->str.substr(0, this->str.length() - 1);
+        if (c >= 'A' && c <= 'Z') {
+            this->str += c;
+            this->index++;
+            this->printline();
+        } else
+            switch (c) {
+                case 3:;
+                    system(STTY_OPEN TTY_PATH);
+                    printf("\nExit with code 3\n");
+                    exit(0);
+                case 9:
+                    system(STTY_OPEN TTY_PATH);
+                    this->btn = "tab";
+                    this->Jtab(this->Jsend());
+                    break;
+                case 127:
+                    if (this->str.length() > 0) {
+                        this->str = this->str.substr(0, this->str.length() - 1);
+                        this->printline();
+                    }
+                    break;
+                case 91:
+                    this->Input();
+                    break;
+                case 65:
+                    this->UP();
+                    //printf("UP");
+                    break;
+                case 66:
+                    this->DN();
+                    //printf("DN");
+                    break;
+                case 68:
+                    this->LF();
+                    //printf("LF");
+                    break;
+                case 67:
+                    this->RT();
+                    //printf("RT");
+                    break;
+                case 27:
+                    this->Input();
+                    break;
+                case 13:
+                    printf("%c", c);
+                    this->index = 0;
+                    this->str = this->str + this->fix;
+                    break;
+                default:
+                    this->str += c;
+                    this->index++;
                     this->printline();
-                }
-                break;
-            case 91:
-                this->Input();
-                break;
-            case 65:
-                this->UP();
-                //printf("UP");
-                break;
-            case 66:
-                this->DN();
-                //printf("DN");
-                break;
-            case 68:
-                this->LF();
-                //printf("LF");
-                break;
-            case 67:
-                this->RT();
-                //printf("RT");
-                break;
-            case 27:
-                this->Input();
-                break;
-            case 13:
-                printf("%c", c);
-                this->index = 0;
-                this->str = this->str + this->fix;
-                break;
-            default:
-                this->str += c;
-                this->index++;
-                this->printline();
-        }
+            }
         return c;
     }
 

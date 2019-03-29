@@ -10,7 +10,7 @@ using namespace std;
 
 Json::Value RCMD::resolve(EZIO *pRoot, string cmd, string btn, string pwd) {
     vector<string> C = EZTools::format(cmd, ' ');
-    vector<string> L = EZTools::format(pwd + (C.size() > 1 ? C.back() : ""), '/');
+    vector<string> L = EZTools::format(pwd + (C.size() >= 1 ? C.back() : ""), '/');
 
     ///cmd cd ../Vi
     ///pwd /Vision/../Vi
@@ -54,22 +54,24 @@ Json::Value RCMD::resolve(EZIO *pRoot, string cmd, string btn, string pwd) {
                     !regexec(&reg, pRoot->getChildren()[i]->get_name().c_str(), nmatch, pm, REG_NOTEOL) ==
                     REG_NOMATCH) {
                     obj["value"] = "";
+                    obj["type"] = pRoot->getChildren()[i]->_file() ? "file" : "dir";
                     obj["key"] = pRoot->getChildren()[i]->get_name();
                     res.append(obj);
                 }
             }
 
         for (int i = 0; i < T->getChildren().size(); i++) {
-            //cout << T->getChildren()[i]->get_name() << pattern << endl;
+            cout << T->getChildren()[i]->get_name() << pattern << endl;
             if (!regexec(&reg, T->getChildren()[i]->get_name().c_str(), nmatch, pm, REG_NOTEOL) == REG_NOMATCH
                 && !T->getChildren()[i]->_hidden()
                 && !T->getChildren()[i]->_global()) {
                 obj["value"] = "";
+                obj["type"] = T->getChildren()[i]->_file() ? "file" : "dir";;
                 obj["key"] = T->getChildren()[i]->get_name();
                 res.append(obj);
             }
         }
-        if(res.size() == 1)
+        if (res.size() == 1)
             value["cmd"] = pre + res[0]["key"].asString();
     }
     if (btn == "cmt") {
