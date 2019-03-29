@@ -19,7 +19,9 @@
     <build_depend>ZeroMQ</build_depend>
     <build_depend>ezshell</build_depend>
     <build_depend>PublicCommands</build_depend>
+    <build_depend>PublicVision</build_depend>
 
+    <run_depend>PublicVision</run_depend>
     <run_depend>PublicCommands</run_depend>
     <run_depend>ezshell</run_depend>
     <run_depend>ZeroMQ</run_depend>

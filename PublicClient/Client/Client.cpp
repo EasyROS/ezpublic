@@ -58,7 +58,7 @@ void Client::Jtab(string str) {
     if (readerinfo->parse(str, root)) {
         if (root["data"].isArray() && !root["data"].empty()) {
             if (root["data"].size() == 1) {
-                this->str = root["data"][0]["key"].asString();
+                this->str = root["cmd"].asString();
             } else {
                 for (int i = 0; i < root["data"].size(); i++) {
                     int tmp = (int) (root["data"][i]["key"].asString().length() / 8);

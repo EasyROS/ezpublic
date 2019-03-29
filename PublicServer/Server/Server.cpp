@@ -1,5 +1,6 @@
 #include "Server.h"
 #include <CommandsBinding.h>
+#include <Vision.h>
 #include <ResolveCMD.h>
 
 Server *S = new Server();
@@ -20,6 +21,7 @@ void *call(char *str) {
 Server::Server() {
     this->pRoot = new directory("root");
     CMD::binding(this->pRoot);
+    Vision::init(this->pRoot);
 }
 
 string Server::JsonToString(Json::Value value) {

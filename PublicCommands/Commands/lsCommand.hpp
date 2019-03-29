@@ -19,8 +19,6 @@ public:
 
     ~ls();
 
-private:
-    string pwd;
 };
 
 #endif //PUBLICCLIENT_LSCOMMAND_HPP

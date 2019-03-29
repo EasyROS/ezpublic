@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
         ZeroMQ
         ezshell
         PublicCommands
+        PublicVision
         )
 find_package(Boost REQUIRED COMPONENTS
         filesystem
@@ -27,6 +28,7 @@ catkin_package(
 
         CATKIN_DEPENDS
         PublicCommands
+        PublicVision
         ZeroMQ
         ezshell
 )
