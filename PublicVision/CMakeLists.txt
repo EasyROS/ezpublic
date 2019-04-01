@@ -9,6 +9,8 @@ find_package(Boost REQUIRED COMPONENTS
         filesystem
         system
         thread)
+find_package(OpenCV REQUIRED COMPONENTS
+        )
 
 if (NOT Boost_FOUND)
     message("未发现Boost")
@@ -34,6 +36,7 @@ option(Test "This is a option for Test, test the package" OFF)
 
 set(SOURCES_DIRECTORIES
         camera
+        capture
         Vision
         #command
         )
@@ -57,14 +60,14 @@ foreach (DIRECTORY ${SOURCES_DIRECTORIES})
         message(STATUS "-- Sources: Test ${DIRECTORY}/test.cpp")
         add_executable(${DIRECTORY} ${ALL_SOURCES} ${DIRECTORY}/test.cpp ${srcs})
         target_link_libraries(${DIRECTORY} ${catkin_LIBRARIES})
-        target_link_libraries(${DIRECTORY} ${Boost_LIBRARIES} ${CMAKE_LIBRARY_PATH})
+        target_link_libraries(${DIRECTORY} ${Boost_LIBRARIES} ${OpenCV_LIBS} ${CMAKE_LIBRARY_PATH})
     else ()
         add_library(${DIRECTORY} ${ALL_SOURCES})
-        target_link_libraries(${DIRECTORY} ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_LIBRARY_PATH})
+        target_link_libraries(${DIRECTORY} ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS} ${CMAKE_LIBRARY_PATH})
     endif ()
 endforeach (DIRECTORY)
 
 add_library(PublicVision SHARED ${ALL_SOURCES})
 
-target_link_libraries(PublicVision ${catkin_LIBRARIES})
+target_link_libraries(PublicVision ${catkin_LIBRARIES} ${OpenCV_LIBS} ${Boost_LIBRARIES})
 

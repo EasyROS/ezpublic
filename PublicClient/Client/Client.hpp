@@ -23,13 +23,15 @@ public:
 private:
     string Jsend();
 
+    bool esc;
+
     void Jout(string out);
 
     void Jtab(string str);
 
     char Input() {
         char c = getchar();
-        if (c >= 'A' && c <= 'Z') {
+        if (c >= 'A' && c <= 'Z' && this->esc) {
             this->str += c;
             this->index++;
             this->printline();
@@ -51,33 +53,37 @@ private:
                     }
                     break;
                 case 91:
+                    this->esc = false;
                     this->Input();
                     break;
                 case 65:
                     this->UP();
-                    //printf("UP");
+                    this->esc = true;
                     break;
                 case 66:
+                    this->esc = true;
                     this->DN();
-                    //printf("DN");
                     break;
                 case 68:
                     this->LF();
-                    //printf("LF");
+                    this->esc = true;
                     break;
                 case 67:
                     this->RT();
-                    //printf("RT");
+                    this->esc = true;
                     break;
                 case 27:
+                    this->esc = false;
                     this->Input();
                     break;
                 case 13:
+                    this->esc = true;
                     printf("%c", c);
                     this->index = 0;
                     this->str = this->str + this->fix;
                     break;
                 default:
+                    this->esc = true;
                     this->str += c;
                     this->index++;
                     this->printline();
@@ -89,7 +95,7 @@ private:
 
     void DN();
 
-    string LF() {
+    void LF() {
         if (this->index > 0) {
             this->index--;
             this->fix.insert(this->fix.begin(), this->str[index]);
@@ -98,7 +104,7 @@ private:
         }
     }
 
-    string RT() {
+    void RT() {
         if (this->index < this->str.length() + this->fix.length()) {
             this->str.push_back(this->fix[0]);
             this->fix.erase(this->fix.begin());

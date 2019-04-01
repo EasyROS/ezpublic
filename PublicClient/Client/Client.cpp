@@ -146,13 +146,14 @@ void Client::ShellInput() {
     while (true) {
         this->str = "";
         this->fix = "";
+        this->esc = true;
         printf("%s %s ",
                Input::setColorByStatus(this->pre, CS->getState()).c_str(),
                Input::setColorByStatus(this->pwd, 2).c_str());
 
         while (true) {
             system(STTY_CLOSE TTY_PATH);
-
+            //cout << "c" ;
             char c = this->Input();
 
             if (c == '\n' || c == 13) {
@@ -194,7 +195,6 @@ void Client::printline() {
 }
 
 void Client::UP() {
-
     if (this->memindex > 0) {
         this->memindex--;
         this->str = this->mem[this->memindex];
@@ -210,24 +210,25 @@ void Client::UP() {
 
 void Client::DN() {
 
-    if (this->memindex < this->mem.size() - 1) {
-        this->memindex++;
-        this->str = this->mem[this->memindex];
-        this->index = (int) this->str.length();
-        this->fix = "";
-        printf("\33[2K\r");
-        printf("%s %s %s",
-               Input::setColorByStatus(this->pre, 4).c_str(),
-               Input::setColorByStatus(this->pwd, 2).c_str(),
-               this->str.c_str());
-    } else {
-        this->str = "";
+    if (!mem.empty())
+        if (this->memindex < this->mem.size() - 1) {
+            this->memindex++;
+            this->str = this->mem[this->memindex];
+            this->index = (int) this->str.length();
+            this->fix = "";
+            printf("\33[2K\r");
+            printf("%s %s %s",
+                   Input::setColorByStatus(this->pre, 4).c_str(),
+                   Input::setColorByStatus(this->pwd, 2).c_str(),
+                   this->str.c_str());
+        } else {
+            this->str = "";
 
-        printf("\33[2K\r");
-        printf("%s %s %s",
-               Input::setColorByStatus(this->pre, 4).c_str(),
-               Input::setColorByStatus(this->pwd, 2).c_str(),
-               this->str.c_str());
-    }
+            printf("\33[2K\r");
+            printf("%s %s %s",
+                   Input::setColorByStatus(this->pre, 4).c_str(),
+                   Input::setColorByStatus(this->pwd, 2).c_str(),
+                   this->str.c_str());
+        }
 
 }

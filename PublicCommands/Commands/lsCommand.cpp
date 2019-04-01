@@ -55,7 +55,6 @@ Json::Value lsCommand::run() {
                         res.append(obj);
                     }
                 }
-
             }
         }
     }

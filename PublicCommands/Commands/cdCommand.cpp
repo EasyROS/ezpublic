@@ -24,7 +24,7 @@ Json::Value cdCommand::run() {
                     try {
                         T = T->searchChild(L[j]);
                         if (!T->_dir()) {
-                            value["err"] = L[j] + "Is Not Directory";
+                            value["err"] = L[j] + " Is Not Directory";
                             return value;
                         }
 

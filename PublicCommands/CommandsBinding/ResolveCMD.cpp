@@ -12,9 +12,6 @@ Json::Value RCMD::resolve(EZIO *pRoot, string cmd, string btn, string pwd) {
     vector<string> C = EZTools::format(cmd, ' ');
     vector<string> L = EZTools::format(pwd + (C.size() >= 1 ? C.back() : ""), '/');
 
-    ///cmd cd ../Vi
-    ///pwd /Vision/../Vi
-
     EZIO *T = pRoot;
     Json::Value value;
     value["cmd"] = cmd;
@@ -61,7 +58,7 @@ Json::Value RCMD::resolve(EZIO *pRoot, string cmd, string btn, string pwd) {
             }
 
         for (int i = 0; i < T->getChildren().size(); i++) {
-            cout << T->getChildren()[i]->get_name() << pattern << endl;
+            //cout << T->getChildren()[i]->get_name() << pattern << endl;
             if (!regexec(&reg, T->getChildren()[i]->get_name().c_str(), nmatch, pm, REG_NOTEOL) == REG_NOMATCH
                 && !T->getChildren()[i]->_hidden()
                 && !T->getChildren()[i]->_global()) {

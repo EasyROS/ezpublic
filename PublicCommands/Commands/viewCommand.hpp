@@ -1,12 +1,23 @@
-//
-// Created by dean on 19-3-18.
-//
-
 #ifndef PUBLICCLIENT_VIEWCOMMAND_HPP
 #define PUBLICCLIENT_VIEWCOMMAND_HPP
 
+#include "EZOutput.h"
 
-class viewCommand {
+class viewCommand :public file{
+public:
+    viewCommand(string name) : file(name) {}
+
+    Json::Value run();
+
+};
+
+class view : public EZCommand {
+public:
+    view();
+
+    void init(EZIO *r);
+
+    ~view();
 
 };
 

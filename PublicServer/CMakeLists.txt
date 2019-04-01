@@ -70,9 +70,9 @@ foreach (DIRECTORY ${SOURCES_DIRECTORIES})
 endforeach (DIRECTORY)
 
 add_executable(MainServer ${ALL_SOURCES} Server/MainServer.cpp)
-target_link_libraries(MainServer ${catkin_LIBRARIES})
+target_link_libraries(MainServer ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_library(PublicServer SHARED ${ALL_SOURCES})
 
-target_link_libraries(PublicServer ${catkin_LIBRARIES})
+target_link_libraries(PublicServer ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
