@@ -34,6 +34,7 @@ Json::Value cdCommand::run() {
                         return value;
                     }
                 }
+                cout << T->get_name() << endl;
                 value["pwd"] = EZTools::connect_string(T->getPWD(), '/');
             }
             if (C.size() == 1) {

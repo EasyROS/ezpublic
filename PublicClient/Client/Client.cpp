@@ -6,8 +6,98 @@
 #include <termios.h>
 #include <zconf.h>
 #include <sstream>
+#include <boost/thread.hpp>
+#include <opencv2/opencv.hpp>
+#include <base64.h>
 
 ClientShell *CS = new ClientShell();
+int port;
+
+void view_thread() {
+    void *context = zmq_init(1);
+    void *socket = zmq_socket(context, ZMQ_REQ);
+
+    Json::Value client_res;
+    Json::FastWriter fw;
+    Json::Reader *readerinfo = new Json::Reader(Json::Features::strictMode());
+    stringstream ss;
+
+    try {
+        ss << port;
+
+        string address;
+        string method = "tcp://";
+        string host = "127.0.0.1";
+        string port = ss.str();
+        address = method + host + ":" + port;
+
+        char *addr = (char *) address.data();
+
+        zmq_connect(socket, addr);
+    } catch (zmq::error_t e) {
+    }
+
+    bool power = true;
+    string windowName = "cap_thread" + ss.str();
+
+    cv::namedWindow(windowName);
+
+    while (power) {
+        char buffer[1024 * 512] = {0};
+        client_res["view"] = power;
+        strcpy(buffer, fw.write(client_res).c_str());
+        zmq_send(socket, buffer, strlen(buffer) + 1, 0);
+        zmq_recv(socket, buffer, sizeof(buffer) - 1, 0);
+        usleep(1);
+        if (readerinfo->parse(string(buffer), client_res)) {
+            if (client_res["view"].asBool()) {
+                if (client_res["mat"].isString()) {
+
+                    string str = client_res["mat"].asString();
+                    if (str.length() > 1) {
+                        try {
+                            cv::Mat
+                            img;
+                            std::string decoded = base64_decode(str);
+                            std::vector<uchar> data_decode(decoded.begin(), decoded.end());
+                            if (!data_decode.empty())
+                                img = cv::imdecode(data_decode, CV_LOAD_IMAGE_COLOR);
+
+                            if (!img.empty())
+                                cv::imshow(windowName, img);
+
+                        } catch (cv::Exception e) {
+                            cout << e.err << endl;
+                        }
+
+                    }
+
+                }
+                client_res["mat"] = "";
+            } else {
+                break;
+            }
+        }
+        if (1048695 == cv::waitKey(30)) {
+            client_res["view"] = false;
+            client_res["mat"] = "";
+            strcpy(buffer, fw.write(client_res).c_str());
+            zmq_send(socket, buffer, strlen(buffer) + 1, 0);
+            zmq_recv(socket, buffer, sizeof(buffer) - 1, 0);
+            break;
+        }
+    }
+}
+
+void view_thread_run() {
+    try {
+        boost::thread ct(&view_thread);
+        ct.detach();
+    } catch (boost::thread_exception e) {
+
+    }
+
+}
 
 Client::Client() {
     this->pre = "➜ ";
@@ -112,6 +202,13 @@ void Client::Jout(string out) {
             this->pwd = root["pwd"].asString();
         }
 
+        if (root["view"].isBool()) {
+            if (root["port"].isInt()) {
+                port = root["port"].asInt();
+                view_thread_run();
+            }
+        }
+
         if (root["data"].isArray()) {
             for (int i = 0; i < root["data"].size(); i++) {
 
@@ -131,7 +228,6 @@ void Client::Jout(string out) {
                 else
                     cout << "\r" << root["data"][i]["value"].asString() << endl;
             }
-            //cout << root["data"].asString() << endl;
         }
     }
 

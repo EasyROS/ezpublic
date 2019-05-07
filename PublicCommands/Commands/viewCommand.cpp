@@ -20,18 +20,18 @@ Json::Value viewCommand::run() {
                 for (int j = 0; j < L.size(); j++) {
                     try {
                         T = T->searchChild(L[j]);
+                        cout << T->get_name() << " " << T->_view()<< endl;
                         if (!T->_view() && j == L.size() - 1) {
                             value["err"] = L[j] + " Is Not VIEW";
                             return value;
                         }
-
                     } catch (char const *e) {
                         if (string(e) == "404")
                             value["err"] = "Directory Not Found :" + L[j];
                         return value;
                     }
                 }
-                value = T->run();
+                //value = T->run();
             }
             if (C.size() == 1) {
                 try {

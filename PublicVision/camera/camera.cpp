@@ -18,16 +18,16 @@ void Camera::init(EZIO *r) {
     r->Add(C);
     C->set_dir()->set_display()->set_not_exec();
 
-    cap = (new capture())
+    cap = ((new capture())
             ->set_file()
             ->set_exec()
             ->set_display()
-            ->set_not_view();
+            ->set_not_view());
     C->Add((new show())
                    ->set_file()
                    ->set_exec()
                    ->set_display()
-                   ->set_not_view());
+                   ->set_view());
 
     C->Add(cap);
     Camera::_Thread_ON();
@@ -38,14 +38,6 @@ void cap_thread() {
         res = cap->run();
         if (res["mat"].isString()) {
             caprun = true;
-//            string str = res["mat"].asString();
-//            cv::Mat img;
-//            std::vector<uchar> data_decode(str.begin(),str.end());
-//
-//            img = cv::imdecode(data_decode,CV_LOAD_IMAGE_COLOR);
-//            cv::imshow("cap_thread", img);
-//
-//            cv::waitKey(30);
         } else {
             caprun = false;
             cout << "ERROR CAP_THREAD BREAK !!!" << endl;
