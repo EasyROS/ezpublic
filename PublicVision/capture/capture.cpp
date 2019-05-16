@@ -24,6 +24,7 @@ Json::Value capture::run() {
 
     cap_res["mat"] = base64_encode(c, str_encode.size());
     //cout << cap_res["mat"].asString().size()  << endl;
+    this->res = cap_res;
     return cap_res;
 }
 

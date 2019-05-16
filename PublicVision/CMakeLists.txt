@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(PublicVision)
-set(CMAKE_INCLUDE_PATH "/usr/include")
-set(CMAKE_LIBRARY_PATH "/usr/lib/x86_64-linux-gnu/libncurses.so")
+set(CMAKE_INCLUDE_PATH "/home/dean/dean.test/darknet/include")
+set(CMAKE_LIBRARY_PATH "/home/dean/dean.test/darknet/libdarknet.so")
 find_package(catkin REQUIRED COMPONENTS
         ezshell
         )
@@ -30,7 +30,7 @@ catkin_package(
 )
 ### include TL package
 include_directories(${catkin_INCLUDE_DIRS})
-
+message(----${CMAKE_LIBRARY_PATH})
 
 option(Test "This is a option for Test, test the package" OFF)
 
@@ -38,6 +38,7 @@ set(SOURCES_DIRECTORIES
         camera
         capture
         Vision
+        yolo
         #command
         )
 
@@ -63,11 +64,11 @@ foreach (DIRECTORY ${SOURCES_DIRECTORIES})
         target_link_libraries(${DIRECTORY} ${Boost_LIBRARIES} ${OpenCV_LIBS} ${CMAKE_LIBRARY_PATH})
     else ()
         add_library(${DIRECTORY} ${ALL_SOURCES})
-        target_link_libraries(${DIRECTORY} ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS} ${CMAKE_LIBRARY_PATH})
+        target_link_libraries(${DIRECTORY} ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS} ${CMAKE_LIBRARY_PATH} "${CMAKE_SOURCE_DIR}/libdarknet.a")
     endif ()
 endforeach (DIRECTORY)
 
-add_library(PublicVision SHARED ${ALL_SOURCES})
+add_library(PublicVision SHARED ${ALL_SOURCES} )
 
 target_link_libraries(PublicVision ${catkin_LIBRARIES} ${OpenCV_LIBS} ${Boost_LIBRARIES})
 
