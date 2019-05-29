@@ -31,7 +31,7 @@ Json::Value viewCommand::run() {
                         return value;
                     }
                 }
-                //value = T->run();
+                value = T->run();
             }
             if (C.size() == 1) {
                 try {

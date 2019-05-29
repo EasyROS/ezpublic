@@ -1,8 +1,7 @@
 #include <iostream>
-#include "yolo.h"
-#include "../../../ezshell/EZIO/EZIO.hpp"
 #include <opencv2/opencv.hpp>
 #include <fstream>
+#include "darknet.h"
 
 using namespace std;
 using namespace cv;
@@ -136,6 +135,7 @@ int main() {
 
     network *net = load_network((char *) cfgfile.c_str(), (char *) weightfile.c_str(), 0);//加载网络模型
     set_batch_network(net, 1);
+    VideoCapture capture(0);//读取视频，请自行修改相应路径
     Mat
     frame;
     Mat
@@ -153,6 +153,10 @@ int main() {
 
     bool stop = false;
     while (!stop) {
+        if (!capture.read(frame)) {
+            printf("fail to read.\n");
+            return 0;
+        }
         cvtColor(frame, rgbImg, cv::COLOR_BGR2RGB);
 
         float *srcImg;
@@ -239,5 +243,6 @@ int main() {
         free(resizeImg);
     }
     free_network(net);
+    capture.release();
     return 0;
 }

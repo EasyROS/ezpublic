@@ -11,6 +11,7 @@ find_package(Boost REQUIRED COMPONENTS
         thread)
 find_package(OpenCV REQUIRED COMPONENTS
         )
+find_package(CUDA REQUIRED)
 
 if (NOT Boost_FOUND)
     message("未发现Boost")
@@ -30,9 +31,11 @@ catkin_package(
 )
 ### include TL package
 include_directories(${catkin_INCLUDE_DIRS})
+include_directories("${CUDA_INCLUDE_DIRS}")
 message(----${CMAKE_LIBRARY_PATH})
 
 option(Test "This is a option for Test, test the package" OFF)
+ADD_DEFINITIONS(-DGPU -DCUDNN -DOPENCV)
 
 set(SOURCES_DIRECTORIES
         camera
@@ -64,11 +67,11 @@ foreach (DIRECTORY ${SOURCES_DIRECTORIES})
         target_link_libraries(${DIRECTORY} ${Boost_LIBRARIES} ${OpenCV_LIBS} ${CMAKE_LIBRARY_PATH})
     else ()
         add_library(${DIRECTORY} ${ALL_SOURCES})
-        target_link_libraries(${DIRECTORY} ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS} ${CMAKE_LIBRARY_PATH} "${CMAKE_SOURCE_DIR}/libdarknet.a")
+        target_link_libraries(${DIRECTORY} ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS} ${CMAKE_LIBRARY_PATH})
     endif ()
 endforeach (DIRECTORY)
 
 add_library(PublicVision SHARED ${ALL_SOURCES} )
 
-target_link_libraries(PublicVision ${catkin_LIBRARIES} ${OpenCV_LIBS} ${Boost_LIBRARIES})
+target_link_libraries(PublicVision ${catkin_LIBRARIES} ${OpenCV_LIBS} ${Boost_LIBRARIES} ${CMAKE_LIBRARY_PATH})
 

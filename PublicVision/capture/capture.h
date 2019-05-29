@@ -4,7 +4,7 @@
 #include <EZOutput.h>
 #include <zmq.hpp>
 
-class capture: public file{
+class capture : public file {
 public:
     capture();
 
@@ -12,11 +12,12 @@ public:
 
 };
 
-class show: public file{
+class show : public file {
 public:
     show();
 
     Json::Value run();
 
 };
+
 #endif //PUBLICVISION_CAPTURE_H

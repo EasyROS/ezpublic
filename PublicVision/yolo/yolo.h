@@ -10,14 +10,14 @@ class yolo {
 public:
     yolo();
     void init();
-    cv::Mat detect(cv::Mat img);
+    cv::Mat detect();
     cv::Mat pullImg();
     Json::Value getRes();
 };
 
-class YOLO : public file {
+class YOLOv3 : public file {
 public:
-    YOLO();
+    YOLOv3();
 
     Json::Value run();
 };

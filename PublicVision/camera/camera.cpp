@@ -5,12 +5,17 @@
 #include <boost/thread.hpp>
 
 EZIO *C;
+yolo *Y;
 Json::Value res;
 EZIO *cap;
 bool caprun;
 
 EZIO *Camera::GET_CAMERA_NODE() {
     return C;
+}
+
+yolo* Camera::GET_YOLO() {
+    return Y;
 }
 
 void Camera::init(EZIO *r) {
@@ -24,17 +29,18 @@ void Camera::init(EZIO *r) {
             ->set_exec()
             ->set_display()
             ->set_not_view());
-    cap = ((new YOLO())
-            ->set_file()
-            ->set_exec()
-            ->set_display()
-            ->set_not_view());
     C->Add((new show())
                    ->set_file()
                    ->set_exec()
                    ->set_display()
                    ->set_view());
 
+    C->Add((new YOLOv3())
+                   ->set_file()
+                   ->set_exec()
+                   ->set_display()
+                   ->set_view());
+    Y->init();
     C->Add(cap);
     Camera::_Thread_ON();
 }
