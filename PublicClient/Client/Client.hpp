@@ -29,6 +29,8 @@ private:
 
     void Jtab(string str);
 
+    void send();
+
     char Input() {
         char c = getchar();
         if (c >= 'A' && c <= 'Z' && this->esc) {

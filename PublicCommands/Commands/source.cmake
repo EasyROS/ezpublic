@@ -5,4 +5,6 @@ set( Source
         lsCommand.cpp
         viewCommand.hpp
         viewCommand.cpp
+        powerCommand.cpp
+        powerCommand.hpp
 )

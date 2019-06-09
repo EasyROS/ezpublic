@@ -117,6 +117,19 @@ string Client::Jsend() {
     return CTS->talk(fw.write(value));
 }
 
+void Client::send() {
+    ClientToServer *CTS = new ClientToServer();
+
+    Json::Value value;
+    Json::FastWriter fw;
+
+    value["pwd"] = this->pwd;
+    value["cmd"] = this->str;
+    value["btn"] = this->btn;
+
+    CTS->send(fw.write(value));
+}
+
 void Client::Jtab(string str) {
     Json::Reader *readerinfo = new Json::Reader(Json::Features::strictMode());
 
@@ -262,6 +275,11 @@ void Client::ShellInput() {
 
         if (this->str == "exit") {
             printf("\n");
+            break;
+        }
+        if (this->str == "power") {
+            printf("\n");
+            this->send();
             break;
         }
         if (this->str.length() > 0) {

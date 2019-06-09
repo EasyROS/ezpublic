@@ -10,6 +10,7 @@
 #include "../Commands/lsCommand.hpp"
 #include "../Commands/cdCommand.hpp"
 #include "../Commands/viewCommand.hpp"
+#include "../Commands/powerCommand.hpp"
 
 namespace CMD{
 
