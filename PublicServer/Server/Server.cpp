@@ -5,7 +5,7 @@
 
 Server *S = new Server();
 void *call(char *str) {
-    cout << str << endl;
+    //cout << str << endl;
 
     S->StringToJson(str);
     Json::Value res = RCMD::resolve(S->pRoot,
@@ -15,7 +15,7 @@ void *call(char *str) {
     );
 
     EZServer::sendToClient(S->JsonToString(res));
-    cout << S->JsonToString(res) << endl;
+    //cout << S->JsonToString(res) << endl;
 }
 
 Server::Server() {

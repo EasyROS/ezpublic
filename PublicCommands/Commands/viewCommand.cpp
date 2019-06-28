@@ -20,7 +20,7 @@ Json::Value viewCommand::run() {
                 for (int j = 0; j < L.size(); j++) {
                     try {
                         T = T->searchChild(L[j]);
-                        cout << T->get_name() << " " << T->_view()<< endl;
+                        //cout << T->get_name() << " " << T->_view()<< endl;
                         if (!T->_view() && j == L.size() - 1) {
                             value["err"] = L[j] + " Is Not VIEW";
                             return value;

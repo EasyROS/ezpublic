@@ -1,6 +1,7 @@
 #include "camera.h"
 #include "../capture/capture.h"
 #include "../yolo/yolo.h"
+#include "../opencv_no_thread/opencv_no_thread.h"
 #include <opencv2/opencv.hpp>
 #include <boost/thread.hpp>
 
@@ -34,7 +35,11 @@ void Camera::init(EZIO *r) {
                    ->set_exec()
                    ->set_display()
                    ->set_view());
-
+    C->Add((new opencv_no_thread())
+                   ->set_file()
+                   ->set_exec()
+                   ->set_display()
+                   ->set_view());
     C->Add((new YOLOv3())
                    ->set_file()
                    ->set_exec()

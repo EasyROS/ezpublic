@@ -42,6 +42,7 @@ set(SOURCES_DIRECTORIES
         capture
         Vision
         yolo
+        opencv_no_thread
         #command
         )
 

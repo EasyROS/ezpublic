@@ -103,10 +103,8 @@ Client::Client() {
     this->pre = "➜ ";
 }
 
+ClientToServer *CTS = new ClientToServer();
 string Client::Jsend() {
-
-    ClientToServer *CTS = new ClientToServer();
-
     Json::Value value;
     Json::FastWriter fw;
 
@@ -219,6 +217,46 @@ void Client::Jout(string out) {
             if (root["port"].isInt()) {
                 port = root["port"].asInt();
                 view_thread_run();
+            }
+        }
+
+        if (root["opencv"].isBool()) {
+
+            Json::Value client_res;
+            Json::FastWriter fw;
+            Json::Reader *readerinfo = new Json::Reader(Json::Features::strictMode());
+            stringstream ss;
+            cv::namedWindow("opencv");
+
+            while (1) {
+                usleep(1);
+                if (readerinfo->parse(out, client_res)) {
+                    if (client_res["mat"].isString()) {
+
+                        string str = client_res["mat"].asString();
+                        if (str.length() > 1) {
+                            try {
+                                cv::Mat
+                                img;
+                                std::string decoded = base64_decode(str);
+                                std::vector<uchar> data_decode(decoded.begin(), decoded.end());
+                                if (!data_decode.empty())
+                                    img = cv::imdecode(data_decode, CV_LOAD_IMAGE_COLOR);
+
+                                if (!img.empty())
+                                    cv::imshow("opencv", img);
+
+                            } catch (cv::Exception e) {
+                                cout << e.err << endl;
+                            }
+                        }
+                    }
+                }
+                if (1048695 == cv::waitKey(30)) {
+                    client_res["mat"] = "";
+                    break;
+                }
+                out = Jsend();
             }
         }
 
